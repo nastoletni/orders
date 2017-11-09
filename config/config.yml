@@ -1,0 +1,35 @@
+imports:
+  - { resource: parameters.yml }
+  - { resource: services.yml }
+
+framework:
+    secret: '%secret%'
+    templating:
+        engines: ['twig']
+    profiler: { only_exceptions: false }
+
+doctrine:
+    dbal:
+        driver: pdo_mysql
+        host: '%database_host%'
+        port: '%database_port%'
+        dbname: '%database_name%'
+        user: '%database_user%'
+        password: '%database_password%'
+        charset: UTF8
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        mappings:
+            Orders:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Domain'
+                prefix: 'Nastoletni\Orders\Domain'
+                alias: Domain
+
+web_profiler:
+  toolbar: true
+  intercept_redirects: false

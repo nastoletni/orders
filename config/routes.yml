@@ -1,0 +1,24 @@
+api.order.all:
+  path: /api/order
+  methods: [GET]
+  defaults: { _controller: 'order.apiController:all' }
+
+api.order.place:
+  path: /api/order
+  methods: [POST]
+  defaults: { _controller: 'order.apiController:placeOrder' }
+
+api.order.patchStage:
+  path: /api/order/{id}/stage
+  methods: [PATCH]
+  defaults: { _controller: 'order.apiController:patchStage' }
+
+api.order.delete:
+  path: /api/order/{id}
+  methods: [DELETE]
+  defaults: { _controller: 'order.apiController:delete' }
+
+api.item.all:
+  path: /api/item
+  methods: [GET]
+  defaults: { _controller: 'item.apiController:all' }

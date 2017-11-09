@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    # automatically injects dependencies in your services
+    autowire: true
+    # automatically registers your services as commands, event subscribers, etc.
+    autoconfigure: true
+    public: true
+
+  order.repository:
+    class: Nastoletni\Orders\Domain\OrderRepository
+    factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
+    arguments:
+        - Nastoletni\Orders\Domain\Order
+
+  order.apiController:
+    class: Nastoletni\Orders\UserInterface\Api\OrderController
+    tags: ['controller.service_arguments']
+
+  item.apiController:
+    class: Nastoletni\Orders\UserInterface\Api\ItemController
+    tags: ['controller.service_arguments']
