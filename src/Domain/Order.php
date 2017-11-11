@@ -6,10 +6,12 @@ namespace Nastoletni\Orders\Domain;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="OrderRepository")
+ * @ORM\Entity(repositoryClass="\Nastoletni\Orders\Infrastructure\Doctrine\OrderRepository")
+ * @ORM\Table(name="orders")
  */
 class Order
 {
@@ -31,7 +33,7 @@ class Order
     /**
      * @var string
      *
-     * @ORM\Column()
+     * @ORM\Column(name="name")
      */
     private $name;
 
@@ -57,11 +59,11 @@ class Order
     private $address;
 
     /**
-     * @var OrderItem[]
+     * @var OrderedItem[]
      *
-     * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="OrderedItem", mappedBy="order", cascade={"persist", "remove"})
      */
-    private $items;
+    private $orderedItems;
 
     /**
      * @var string
@@ -89,7 +91,7 @@ class Order
      */
     public function __construct()
     {
-        $this->items = new ArrayCollection();
+        $this->orderedItems = new ArrayCollection();
     }
 
     /**
@@ -165,19 +167,19 @@ class Order
     }
 
     /**
-     * @return OrderItem[]
+     * @return Collection
      */
-    public function getItems(): array
+    public function getOrderedItems(): Collection
     {
-        return $this->items;
+        return $this->orderedItems;
     }
 
     /**
-     * @param OrderItem $item
+     * @param OrderedItem $item
      */
-    public function addItem(OrderItem $item): void
+    public function addOrderedItem(OrderedItem $item): void
     {
-        $this->items->add($item);
+        $this->orderedItems->add($item);
     }
 
     /**

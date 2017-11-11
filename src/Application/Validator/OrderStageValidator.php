@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Nastoletni\Orders\Application\Validator;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validation;
 
-class OrderValidator
+class OrderStageValidator
 {
     public function validate(Request $request): ConstraintViolationListInterface
     {
-        return new ConstraintViolationList();
+        $validator = Validation::createValidator();
+
+        $validator->validate($request->request, [
+           new Obje
+        ]);
     }
 }

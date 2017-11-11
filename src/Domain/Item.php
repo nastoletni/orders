@@ -7,7 +7,8 @@ namespace Nastoletni\Orders\Domain;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="\Nastoletni\Orders\Infrastructure\Doctrine\ItemRepository")
+ * @ORM\Table(name="items")
  */
 class Item
 {

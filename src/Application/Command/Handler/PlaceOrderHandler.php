@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Nastoletni\Orders\Application\Command\Handler;
 
 use DateTime;
-use Nastoletni\Orders\Application\Command\PlaceOrder;
+use Nastoletni\Orders\Application\Command\PlaceOrderCommand;
+use Nastoletni\Orders\Domain\Exception\ItemNotFoundException;
 use Nastoletni\Orders\Domain\ItemRepository;
 use Nastoletni\Orders\Domain\Order;
-use Nastoletni\Orders\Domain\OrderItem;
+use Nastoletni\Orders\Domain\OrderedItem;
 use Nastoletni\Orders\Domain\OrderRepository;
 
 class PlaceOrderHandler
@@ -36,11 +37,13 @@ class PlaceOrderHandler
     }
 
     /**
-     * @param PlaceOrder $command
+     * @param PlaceOrderCommand $command
      *
      * @return PlaceOrderPayload
+     *
+     * @throws Exception\ItemNotFoundException
      */
-    public function handle(PlaceOrder $command): PlaceOrderPayload
+    public function handle(PlaceOrderCommand $command): PlaceOrderPayload
     {
         $order = new Order();
         $order->setName($command->getName());
@@ -53,13 +56,18 @@ class PlaceOrderHandler
         $order->setPlacedAt(new DateTime());
 
         foreach ($command->getItems() as $commandItem) {
-            $item = $this->itemRepository->byId($commandItem['id']);
+            try {
+                $item = $this->itemRepository->byId($commandItem['id']);
+            } catch (ItemNotFoundException $e) {
+                throw new Exception\ItemNotFoundException($e->getMessage());
+            }
 
-            $orderItem = new OrderItem();
+            $orderItem = new OrderedItem();
             $orderItem->setAmount(intval($commandItem['amount']));
+            $orderItem->setOrder($order);
             $orderItem->setItem($item);
 
-            $order->addItem($orderItem);
+            $order->addOrderedItem($orderItem);
         }
 
         $this->orderRepository->save($order);
