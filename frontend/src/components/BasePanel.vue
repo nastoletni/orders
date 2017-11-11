@@ -1,11 +1,16 @@
 <template>
-    <div class="panel">
+    <div class="panel" :class="{slim, error}">
         <slot></slot>
     </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    slim: Boolean,
+    error: Boolean
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -20,5 +25,13 @@ export default {}
   margin-top: 30px;
   margin-bottom: 30px;
   padding: 50px;
+  &.slim {
+      padding: 10px;
+      margin: 10px;
+      margin-bottom: 30px;
+  }
+  &.error {
+      border-image: @error-gradient 1;
+  }
 }
 </style>

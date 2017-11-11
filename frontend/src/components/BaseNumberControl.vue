@@ -4,8 +4,8 @@
       <label>{{label}}</label>
     </div>
     <div class="number-control">
-      <BaseButton type="button" @click="add(-1)">-</BaseButton>
-      <BaseInputField type="number" @input="$emit('input', $event.target.value)" :value="value" />
+      <BaseButton type="button" @click="add(-1)" :disabled="value === 0">-</BaseButton>
+      <BaseInputField type="number" @input="$emit('input', $event)" :value="value" />
       <BaseButton type="button" @click="add(1)">+</BaseButton>
     </div>
     <BaseInputField type="text" class="price" :value="price" readonly/>
