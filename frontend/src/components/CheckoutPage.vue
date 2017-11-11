@@ -1,30 +1,31 @@
 <template>
-    <BaseContainer>
-        <BasePanel>
-            <form>
-                <BaseAnimatedFold :show="showForm">
-                    <h1>Złóż zamówienie</h1>
-                    <BaseFormControl label="Imię i nazwisko" />
-                    <BaseFormControl label="Telefon" />
-                    <BaseFormControl label="Adres email" />
-                    <BaseFormControl label="Adres wysyłki" type="textarea" />
-                    <BaseDivider />
-                    <BaseNumberControl label="Kubek" v-model="kubek" :price="(kubek * 8).toFixed(2) + ' zł'" />
-                    <BaseNumberControl label="Naklejki" v-model="naklejki" :price="(naklejki * 2).toFixed(2) + ' zł'" />
-                    <BaseDivider />
-
-                    <div class="bottom-columns">
-                        <div class="spacer"></div>
-                        <BaseButton @click="placeOrder">Złóż zamówienie</BaseButton>
-                        <input type="text" readonly class="total" value="0.00 zł" />
-                    </div>
-                </BaseAnimatedFold>
-                <BaseAnimatedFold :show="!showForm">
-                    <BaseCircularIndicator :state="state" />
-                </BaseAnimatedFold>
-            </form>
-        </BasePanel>
-    </BaseContainer>
+  <BaseContainer>
+    <BasePanel>
+      <form>
+        <BaseAnimatedFold :show="showForm">
+          <h1>Złóż zamówienie</h1>
+          <BaseFormControl label="Imię i nazwisko" />
+          <BaseFormControl label="Telefon" />
+          <BaseFormControl label="Adres email" />
+          <BaseFormControl label="Adres wysyłki" type="textarea" />
+          <BaseDivider />
+          <BaseNumberControl v-for="product in products" :key="product.name" :label="product.name" v-model="product.qty" :price="(product.qty * product.price).toFixed(2) + ' zł'" />
+          <BaseDivider />
+          <div class="bottom-columns">
+            <div class="spacer"></div>
+            <BaseButton @click="placeOrder">Złóż zamówienie</BaseButton>
+            <input type="text" readonly class="total" value="0.00 zł" />
+          </div>
+        </BaseAnimatedFold>
+        <BaseAnimatedFold :show="!showForm">
+          <BaseCircularIndicator :state="state" />
+        </BaseAnimatedFold>
+        <BaseAnimatedFold :show="state === 'SUCCESS'">
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae eligendi delectus quod dolore magni cumque pariatur alias eos corporis! Itaque doloremque in nam iure. Dignissimos in eum velit cumque consectetur!</p>
+        </BaseAnimatedFold>
+      </form>
+    </BasePanel>
+  </BaseContainer>
 </template>
 
 <script>
@@ -42,8 +43,18 @@ export default {
   data() {
     return {
       state: 'DEFAULT', // DEFAULT, LOADING, SUCCESS
-      kubek: '1',
-      naklejki: '1'
+      products: [
+        {
+          name: 'Kubek',
+          price: 10.0,
+          qty: 0
+        },
+        {
+          name: 'Naklejki',
+          price: 2.0,
+          qty: 0
+        }
+      ]
     }
   },
   components: {
