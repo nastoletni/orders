@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import CheckoutPage from '../components/CheckoutPage';
+import AdminPage from '../components/AdminPage';
+
 Vue.use(Router)
 
 export default new Router({
@@ -9,6 +11,11 @@ export default new Router({
       path: '/checkout',
       name: 'Checkout',
       component: CheckoutPage
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: AdminPage
     }
   ]
 })

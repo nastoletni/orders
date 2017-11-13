@@ -1,11 +1,15 @@
 <template>
-  <button class="button" type="button" v-bind="$attrs" v-on="$listeners">
+  <button class="button" type="button" v-bind="$attrs" v-on="$listeners" :class="{danger}">
     <slot></slot>
   </button>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    danger: Boolean
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -28,10 +32,18 @@ export default {}
   &:hover {
     background: darken(@primary-color, 15%);
   }
+  &.danger {
+    background: @error-color;
+    border-image: @error-gradient 1;
+    &:hover {
+      background: darken(@error-color, 15%);
+    }
+  }
   &:disabled {
     border-image: @disabled-gradient 1;
     background: @muted-color;
     cursor: not-allowed;
   }
+  
 }
 </style>

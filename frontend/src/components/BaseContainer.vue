@@ -1,11 +1,15 @@
 <template>
-  <div class="container">
+  <div class="container" :class="{wide}">
     <slot></slot>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    wide: Boolean
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -31,10 +35,15 @@ export default {}
   @media (min-width: 1025px) {
     /* big landscape tablets, laptops, and desktops */
     width: 800px;
+    &.wide {
+      width: 80%;
+    }
   }
   @media (min-width: 1281px) {
     /* hi-res laptops and desktops */
-    width: 800px;
+    &.wide {
+      width: 70%;
+    }
   }
 }
 </style>

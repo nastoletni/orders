@@ -5,8 +5,8 @@
         <BaseAnimatedFold :show="showForm">
           <h1>Złóż zamówienie</h1>
           <!--<BasePanel slim error>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea odit dolores, est iste debitis autem beatae eligendi minima officia esse quaerat similique dolorem, dicta, quidem illo? Doloremque hic dicta voluptas.</p>
-            </BasePanel>-->
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea odit dolores, est iste debitis autem beatae eligendi minima officia esse quaerat similique dolorem, dicta, quidem illo? Doloremque hic dicta voluptas.</p>
+                </BasePanel>-->
           <BaseFormControl v-for="field in fields" :key="field.name" :label="field.label" :type="field.type || 'text'" v-model="field.value" @focus="field.hasBeenFocused = true" :error="getFieldError(field)" />
 
           <BaseDivider />
@@ -39,43 +39,18 @@ import BaseButton from './BaseButton'
 import BaseAnimatedFold from './BaseAnimatedFold'
 import BaseCircularIndicator from './BaseCircularIndicator'
 import { validateEmail } from '../utils'
+import { orderFields } from '../schemas'
 
 export default {
   name: 'CheckoutPage',
   data() {
     return {
       state: 'DEFAULT', // DEFAULT, LOADING, SUCCESS
-      fields: [
-        {
-          label: 'Imię i nazwisko',
-          name: 'name',
-          validate: 'NOT_EMPTY',
-          value: '',
-          hasBeenFocused: false
-        },
-        {
-          label: 'Telefon',
-          name: 'phone',
-          validate: 'NOT_EMPTY',
-          value: '',
-          hasBeenFocused: false
-        },
-        {
-          label: 'Adres email',
-          name: 'email',
-          validate: 'EMAIL',
-          value: '',
-          hasBeenFocused: false
-        },
-        {
-          label: 'Adres wysyłki',
-          name: 'address',
-          type: 'textarea',
-          validate: 'NOT_EMPTY',
-          value: '',
-          hasBeenFocused: false
-        }
-      ],
+      fields: orderFields.map(f => ({
+        ...f,
+        hasBeenFocused: false,
+        value: ''
+      })),
       products: [
         {
           name: 'Kubek',
@@ -127,10 +102,13 @@ export default {
       if (this.fields.some(f => this.getFieldError(f, true))) {
         return true
       }
-      if(this.products.some(p => p.qty < 0) || this.products.every(p => p.qty === 0)) {
-        return true;
+      if (
+        this.products.some(p => p.qty < 0) ||
+        this.products.every(p => p.qty === 0)
+      ) {
+        return true
       }
-      return false;
+      return false
     }
   }
 }

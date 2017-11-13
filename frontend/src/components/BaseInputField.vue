@@ -28,8 +28,7 @@ export default {
 
 input,
 textarea {
-  font-size: 14px;
-  font-family: inherit;
+  font: inherit;
   width: calc(100% - 10px);
   border: 1px solid @muted-color;
   padding: 15px 20px;
