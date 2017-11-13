@@ -11,6 +11,7 @@ use Nastoletni\Orders\Application\Command\Handler\Exception\OrderNotFoundExcepti
 use Nastoletni\Orders\Application\Command\Handler\Exception\OrderNotValidException;
 use Nastoletni\Orders\Application\Command\Handler\PlaceOrderPayload;
 use Nastoletni\Orders\Application\Command\PlaceOrderCommand;
+use Nastoletni\Orders\Application\Validator\OrderValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,16 +113,20 @@ class OrderController extends Controller
      */
     public function placeOrder(Request $request): Response
     {
-        $placeOrderCommand = new PlaceOrderCommand(
-            $request->request->get('name'),
-            $request->request->get('phone'),
-            $request->request->get('email'),
-            $request->request->get('address'),
-            $request->request->get('items'),
-            $request->request->get('comments')
-        );
+        $orderValidator = new OrderValidator();
 
         try {
+            $orderValidator->validate($request);
+
+            $placeOrderCommand = new PlaceOrderCommand(
+                $request->request->get('name'),
+                $request->request->get('phone'),
+                $request->request->get('email'),
+                $request->request->get('address'),
+                $request->request->get('items'),
+                $request->request->get('comments')
+            );
+
             /** @var PlaceOrderPayload $payload */
             $payload = $this->get('placeOrder.handler')->handle($placeOrderCommand);
         } catch (ItemNotFoundException $e) {

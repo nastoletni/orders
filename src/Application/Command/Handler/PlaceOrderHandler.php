@@ -5,12 +5,24 @@ declare(strict_types=1);
 namespace Nastoletni\Orders\Application\Command\Handler;
 
 use DateTime;
+use Nastoletni\Orders\Application\Command\Handler\Exception\OrderNotValidException;
 use Nastoletni\Orders\Application\Command\PlaceOrderCommand;
 use Nastoletni\Orders\Domain\Exception\ItemNotFoundException;
 use Nastoletni\Orders\Domain\ItemRepository;
 use Nastoletni\Orders\Domain\Order;
 use Nastoletni\Orders\Domain\OrderedItem;
 use Nastoletni\Orders\Domain\OrderRepository;
+use Symfony\Component\PropertyInfo\Type;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Exception\NoSuchMetadataException;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface;
+use Symfony\Component\Validator\Mapping\MetadataInterface;
+use Symfony\Component\Validator\Validation;
 
 class PlaceOrderHandler
 {
@@ -39,9 +51,9 @@ class PlaceOrderHandler
     /**
      * @param PlaceOrderCommand $command
      *
-     * @return PlaceOrderPayload
-     *
      * @throws Exception\ItemNotFoundException
+     *
+     * @return PlaceOrderPayload
      */
     public function handle(PlaceOrderCommand $command): PlaceOrderPayload
     {

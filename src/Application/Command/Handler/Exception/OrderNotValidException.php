@@ -30,10 +30,20 @@ class OrderNotValidException extends Exception
     }
 
     /**
-     * @return ConstraintViolationListInterface
+     * @return array
      */
-    public function getErrors(): ConstraintViolationListInterface
+    public function getErrors(): array
     {
-        return $this->errors;
+        return $this->errorsToArray();
+    }
+
+    /**
+     * @param ConstraintViolationListInterface $errors
+     *
+     * @return array
+     */
+    private function errorsToArray(ConstraintViolationListInterface $errors): array
+    {
+        //
     }
 }
