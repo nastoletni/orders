@@ -9,8 +9,10 @@ use Nastoletni\Orders\Application\Command\DeleteOrderCommand;
 use Nastoletni\Orders\Application\Command\Handler\Exception\ItemNotFoundException;
 use Nastoletni\Orders\Application\Command\Handler\Exception\OrderNotFoundException;
 use Nastoletni\Orders\Application\Command\Handler\Exception\OrderNotValidException;
+use Nastoletni\Orders\Application\Command\Handler\Exception\OrderStageNotValidException;
 use Nastoletni\Orders\Application\Command\Handler\PlaceOrderPayload;
 use Nastoletni\Orders\Application\Command\PlaceOrderCommand;
+use Nastoletni\Orders\Application\Validator\OrderStageValidator;
 use Nastoletni\Orders\Application\Validator\OrderValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -132,7 +134,7 @@ class OrderController extends Controller
         } catch (ItemNotFoundException $e) {
             return $this->json(['error' => $e->getMessage()], 400);
         } catch (OrderNotValidException $e) {
-            return $this->json(['error' => $e->getMessage(), 'errors' => $e->getErrors()], 400);
+            return $this->json(['errors' => $e->getViolations()], 400);
         }
 
         return $this->json([
@@ -157,8 +159,17 @@ class OrderController extends Controller
      */
     public function patchStage(Request $request, string $id): Response
     {
-        $changeOrderStage = new ChangeOrderStageCommand($id, $request->request->getInt('stage'));
-        $this->get('changeOrderStage.handler')->handle($changeOrderStage);
+        $orderStageValidator = new OrderStageValidator();
+
+        try {
+            $orderStageValidator->validate($request);
+
+            $this->get('changeOrderStage.handler')->handle(
+                new ChangeOrderStageCommand($id, $request->request->getInt('stage'))
+            );
+        } catch (OrderStageNotValidException $e) {
+            return $this->json(['errors' => $e->getViolations()], 400);
+        }
 
         return $this->json(['message' => 'Stage updated successfully'], 200);
     }
