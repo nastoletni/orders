@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nastoletni\Orders;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Nelmio\CorsBundle\NelmioCorsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -26,7 +27,8 @@ class Kernel extends SymfonyKernel
         $bundles =  [
             new FrameworkBundle(),
             new TwigBundle(),
-            new DoctrineBundle()
+            new DoctrineBundle(),
+            new NelmioCorsBundle()
         ];
 
         if ('dev' == $this->getEnvironment()) {
