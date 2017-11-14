@@ -6,6 +6,6 @@ namespace Nastoletni\Orders\Application\Command\Handler\Exception;
 
 use Nastoletni\Orders\Application\Exception\NotValidException;
 
-class OrderNotValidException extends NotValidException
+class OrderStageNotValidException extends NotValidException
 {
 }

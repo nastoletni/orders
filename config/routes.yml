@@ -3,12 +3,12 @@ api.order.all: #done but sorting and filtering
   methods: [GET]
   defaults: { _controller: 'order.apiController:all' }
 
-api.order.place: #done but valid
+api.order.place: #done
   path: /api/order
   methods: [POST]
   defaults: { _controller: 'order.apiController:placeOrder' }
 
-api.order.patchStage: #done but valid
+api.order.patchStage: #done
   path: /api/order/{id}/stage
   methods: [PATCH]
   defaults: { _controller: 'order.apiController:patchStage' }

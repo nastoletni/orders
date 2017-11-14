@@ -11,6 +11,11 @@ use Symfony\Component\Validator\Validation;
 
 class OrderValidator
 {
+    /**
+     * @param Request $request
+     *
+     * @throws OrderNotValidException
+     */
     public function validate(Request $request): void
     {
         $validator = Validation::createValidator();
@@ -47,7 +52,6 @@ class OrderValidator
         ]);
 
         if (count($violations) > 0) {
-            var_dump($violations);
             throw new OrderNotValidException($violations);
         }
     }
