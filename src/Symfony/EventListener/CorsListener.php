@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Nastoletni\Orders\Symfony\EventListener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class CorsListener
 {
     /**
-     * @param GetResponseEvent $event
+     * @param FilterResponseEvent $event
      */
-    public function onKernelResponse(GetResponseEvent $event)
+    public function onKernelResponse(FilterResponseEvent $event)
     {
         $path = $event->getRequest()->getRequestUri();
 
