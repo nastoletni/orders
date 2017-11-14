@@ -31,7 +31,12 @@ class OrderRepository extends EntityRepository implements DomainOrderRepository
      */
     public function all(): array
     {
-        return $this->findAll();
+        return $this
+            ->createQueryBuilder('o')
+            ->select('o')
+            ->orderBy('o.placedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
