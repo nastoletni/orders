@@ -6,12 +6,24 @@ services:
     autoconfigure: true
     public: true
 
+  #
+  # Repositories
+  #
   order.repository:
     class: Nastoletni\Orders\Domain\OrderRepository
     factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
     arguments:
         - Nastoletni\Orders\Domain\Order
 
+  item.repository:
+    class: Nastoletni\Orders\Domain\ItemRepository
+    factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
+    arguments:
+        - Nastoletni\Orders\Domain\Item
+
+  #
+  # Controllers
+  #
   order.apiController:
     class: Nastoletni\Orders\UserInterface\Api\OrderController
     tags: ['controller.service_arguments']
@@ -19,3 +31,32 @@ services:
   item.apiController:
     class: Nastoletni\Orders\UserInterface\Api\ItemController
     tags: ['controller.service_arguments']
+
+  #
+  # Command handlers
+  #
+  placeOrder.handler:
+    class: Nastoletni\Orders\Application\Command\Handler\PlaceOrderHandler
+
+  changeOrderStage.handler:
+    class: Nastoletni\Orders\Application\Command\Handler\ChangeOrderStageHandler
+
+  deleteOrder.handler:
+    class: Nastoletni\Orders\Application\Command\Handler\DeleteOrderHandler
+
+  #
+  # Queries
+  #
+  allItemsQuery:
+    class: Nastoletni\Orders\Application\Query\AllItemsQuery
+
+  allOrdersQuery:
+    class: Nastoletni\Orders\Application\Query\AllOrdersQuery
+
+  #
+  # Event listeners
+  #
+  eventListener.jsonRequestBody:
+    class: Nastoletni\Orders\Symfony\EventListener\JSONRequestBodyListener
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }

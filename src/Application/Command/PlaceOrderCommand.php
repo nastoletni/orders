@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nastoletni\Orders\Application\Command;
 
-class PlaceOrder
+class PlaceOrderCommand
 {
     /**
      * @var string

@@ -1,24 +1,24 @@
-api.order.all:
+api.order.all: #done but sorting and filtering
   path: /api/order
   methods: [GET]
   defaults: { _controller: 'order.apiController:all' }
 
-api.order.place:
+api.order.place: #done but valid
   path: /api/order
   methods: [POST]
   defaults: { _controller: 'order.apiController:placeOrder' }
 
-api.order.patchStage:
+api.order.patchStage: #done but valid
   path: /api/order/{id}/stage
   methods: [PATCH]
   defaults: { _controller: 'order.apiController:patchStage' }
 
-api.order.delete:
+api.order.delete: #done
   path: /api/order/{id}
   methods: [DELETE]
   defaults: { _controller: 'order.apiController:delete' }
 
-api.item.all:
+api.item.all: #done
   path: /api/item
   methods: [GET]
   defaults: { _controller: 'item.apiController:all' }

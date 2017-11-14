@@ -7,8 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(name="order_items")
  */
-class OrderItem
+class OrderedItem
 {
     /**
      * @var int
@@ -22,7 +23,7 @@ class OrderItem
     /**
      * @var Order
      *
-     * @ORM\ManyToOne(targetEntity="Order", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="Order", inversedBy="orderedItems")
      */
     private $order;
 
@@ -54,6 +55,14 @@ class OrderItem
     public function getOrder(): Order
     {
         return $this->order;
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function setOrder(Order $order): void
+    {
+        $this->order = $order;
     }
 
     /**
