@@ -8,6 +8,9 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class JSONRequestBodyListener
 {
+    /**
+     * @param GetResponseEvent $event
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();

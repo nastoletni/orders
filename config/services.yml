@@ -56,7 +56,12 @@ services:
   #
   # Event listeners
   #
-  eventListener.jsonRequestBody:
+  eventListener.jsonRequestBodyListener:
     class: Nastoletni\Orders\Symfony\EventListener\JSONRequestBodyListener
     tags:
       - { name: kernel.event_listener, event: kernel.request }
+
+  eventListener.corsListener:
+    class: Nastoletni\Orders\Symfony\EventListener\CorsListener
+    tags:
+      - { name: kernel.event_listener, event: kernel.response }
