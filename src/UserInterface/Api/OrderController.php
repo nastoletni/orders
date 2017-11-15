@@ -23,6 +23,8 @@ class OrderController extends Controller
     /**
      * GET /api/order
      *
+     * TODO: Add paginating, sorting and filtering functionality.
+     *
      * Example input (all fields are optional, `start` and `length` values are the default ones):
      *
      *     {

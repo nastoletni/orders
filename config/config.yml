@@ -45,8 +45,7 @@ security:
     firewalls:
         api:
             pattern: ^/api
-            anonymous: ~
-            logout: ~
+            anonymous: true
             stateless: true
 
             guard:
