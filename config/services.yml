@@ -64,7 +64,11 @@ services:
   #
   # Other stuff
   #
+  security.tokenSigner:
+    class: Lcobucci\JWT\Signer\Hmac\Sha256
+
   security.apiAuthenticator:
     class: Nastoletni\Orders\Symfony\Security\ApiTokenAuthenticator
     arguments:
+      $signer: '@security.tokenSigner'
       $tokenKey: '%secret%'

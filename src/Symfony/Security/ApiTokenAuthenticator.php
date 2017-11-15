@@ -6,6 +6,7 @@ namespace Nastoletni\Orders\Symfony\Security;
 
 use BadMethodCallException;
 use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Hmac\Sha512;
 use Lcobucci\JWT\Token;
@@ -23,6 +24,11 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorInterface;
 class ApiTokenAuthenticator extends AbstractGuardAuthenticator implements GuardAuthenticatorInterface
 {
     /**
+     * @var Signer
+     */
+    private $signer;
+
+    /**
      * @var string
      */
     private $tokenKey;
@@ -30,11 +36,13 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator implements GuardA
     /**
      * ApiTokenAuthenticator constructor.
      *
+     * @param Signer $signer
      * @param string $tokenKey
      */
-    public function __construct(string $tokenKey)
+    public function __construct(Signer $signer, string $tokenKey)
     {
         $this->tokenKey = $tokenKey;
+        $this->signer = $signer;
     }
 
     /**
@@ -92,7 +100,7 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator implements GuardA
     {
         /** @var $token Token */
         try {
-            if (!$token->verify(new Sha256(), $this->tokenKey)) {
+            if (!$token->verify($this->signer, $this->tokenKey)) {
                 throw new AuthenticationException('Invalid credentials given');
             }
         } catch (BadMethodCallException $e) {
