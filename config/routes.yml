@@ -5,7 +5,7 @@ api.order.all: #done but sorting and filtering
 
 api.order.place: #done
   path: /api/order
-  methods: [POST, OPTIONS]
+  methods: [POST]
   defaults: { _controller: 'order.apiController:placeOrder' }
 
 api.order.patchStage: #done

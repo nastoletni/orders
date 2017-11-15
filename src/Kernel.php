@@ -27,8 +27,7 @@ class Kernel extends SymfonyKernel
         $bundles =  [
             new FrameworkBundle(),
             new TwigBundle(),
-            new DoctrineBundle(),
-            new NelmioCorsBundle()
+            new DoctrineBundle()
         ];
 
         if ('dev' == $this->getEnvironment()) {
