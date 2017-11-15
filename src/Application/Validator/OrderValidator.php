@@ -35,18 +35,22 @@ class OrderValidator
                 'address' => [
                     new Assert\NotNull()
                 ],
-                'items' => new Assert\All([
-                    new Assert\Collection([
-                        'id' => [
-                            new Assert\NotNull(),
-                            new Assert\Type('integer')
-                        ],
-                        'amount' => [
-                            new Assert\NotNull(),
-                            new Assert\Type('integer')
-                        ]
+                'items' => [
+                    new Assert\NotBlank(),
+                    new Assert\All([
+                        new Assert\Collection([
+                            'id' => [
+                                new Assert\NotNull(),
+                                new Assert\Type('integer')
+                            ],
+                            'amount' => [
+                                new Assert\NotNull(),
+                                new Assert\Type('integer'),
+                                new Assert\Range(['min' => 1])
+                            ]
+                        ])
                     ])
-                ]),
+                ],
                 'comments' => []
             ])
         ]);
