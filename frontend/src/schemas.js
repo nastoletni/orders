@@ -7,7 +7,7 @@ export const orderFields = [
   {
     label: 'Telefon',
     name: 'phone',
-    validate: 'NOT_EMPTY'
+    validate: 'PHONE'
   },
   {
     label: 'Adres email',

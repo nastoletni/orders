@@ -12,6 +12,7 @@
   "dependencies": {
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
+    "url-join": "^2.0.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

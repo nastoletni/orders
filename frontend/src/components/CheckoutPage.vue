@@ -10,7 +10,7 @@
           <BaseFormControl v-for="field in fields" :key="field.name" :label="field.label" :type="field.type || 'text'" v-model="field.value" @focus="field.hasBeenFocused = true" :error="getFieldError(field)" />
 
           <BaseDivider />
-          <BaseNumberControl v-for="product in products" :key="product.name" :label="product.name" v-model="product.qty" :price="(product.qty * product.price).toFixed(2) + ' zł'" />
+          <BaseNumberControl v-for="item in items" :key="item.name" :label="item.name" v-model="item.amount" :price="(item.amount * item.price).toFixed(2) + ' zł'" />
           <BaseDivider />
           <div class="bottom-columns">
             <div class="spacer"></div>
@@ -40,29 +40,19 @@ import BaseAnimatedFold from './BaseAnimatedFold'
 import BaseCircularIndicator from './BaseCircularIndicator'
 import { validateEmail } from '../utils'
 import { orderFields } from '../schemas'
+import apiFetch from '../apiFetch'
 
 export default {
   name: 'CheckoutPage',
   data() {
     return {
-      state: 'DEFAULT', // DEFAULT, LOADING, SUCCESS
+      state: 'LOADING', // DEFAULT, LOADING, SUCCESS
       fields: orderFields.map(f => ({
         ...f,
         hasBeenFocused: false,
         value: ''
       })),
-      products: [
-        {
-          name: 'Kubek',
-          price: 10.0,
-          qty: 0
-        },
-        {
-          name: 'Naklejki',
-          price: 2.0,
-          qty: 0
-        }
-      ]
+      items: []
     }
   },
   components: {
@@ -86,12 +76,32 @@ export default {
       if (field.validate === 'EMAIL') {
         return !validateEmail(field.value)
       }
+      if (field.validate === 'PHONE') {
+        return !/\+?[0-9 ]{9,}/.test(field.value)
+      }
       return false
     },
     async placeOrder() {
       this.state = 'LOADING'
-      await new Promise(res => setTimeout(res, 4000))
+      let requestData = {
+        items: this.items
+      }
+      for (let f of this.fields) {
+        requestData[f.name] = f.value
+      }
+      let data = await apiFetch(`/order`, {
+        jsonBody: requestData,
+        method: 'POST'
+      })
       this.state = 'SUCCESS'
+    },
+    async loadItems() {
+      this.state = 'LOADING'
+      this.items = (await apiFetch(`/item`)).items.map(it => ({
+        ...it,
+        amount: 0
+      }))
+      this.state = 'DEFAULT'
     }
   },
   computed: {
@@ -103,13 +113,16 @@ export default {
         return true
       }
       if (
-        this.products.some(p => p.qty < 0) ||
-        this.products.every(p => p.qty === 0)
+        this.items.some(p => p.amount < 0) ||
+        this.items.every(p => p.amount === 0)
       ) {
         return true
       }
       return false
     }
+  },
+  mounted() {
+    this.loadItems()
   }
 }
 </script>
