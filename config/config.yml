@@ -1,6 +1,6 @@
 imports:
-  - { resource: parameters.yml }
-  - { resource: services.yml }
+    - { resource: parameters.yml }
+    - { resource: services.yml }
 
 framework:
     secret: '%secret%'
@@ -31,6 +31,31 @@ doctrine:
                 prefix: 'Nastoletni\Orders\Domain'
                 alias: Domain
 
+security:
+    encoders:
+        Nastoletni\Orders\Domain\User:
+            algorithm: bcrypt
+
+    providers:
+        DoctrineProvider:
+            entity:
+                class: Nastoletni\Orders\Domain\User
+                property: username
+
+    firewalls:
+        api:
+            pattern: ^/api
+            anonymous: ~
+            logout: ~
+            stateless: true
+
+            guard:
+                authenticators:
+                    - security.apiAuthenticator
+
+    access_control:
+        - { path: ^/api/order, roles: ROLE_API }
+
 web_profiler:
-  toolbar: true
-  intercept_redirects: false
+    toolbar: true
+    intercept_redirects: false

@@ -60,3 +60,11 @@ services:
     class: Nastoletni\Orders\Symfony\EventListener\JSONRequestBodyListener
     tags:
       - { name: kernel.event_listener, event: kernel.request }
+
+  #
+  # Other stuff
+  #
+  security.apiAuthenticator:
+    class: Nastoletni\Orders\Symfony\Security\ApiTokenAuthenticator
+    arguments:
+      $tokenKey: '%secret%'
