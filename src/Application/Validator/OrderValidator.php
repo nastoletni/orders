@@ -25,8 +25,7 @@ class OrderValidator
                     new Assert\NotNull()
                 ],
                 'phone' => [
-                    new Assert\NotNull(),
-                    new Assert\Regex('/\+?[0-9 ]{9,}/')
+                    new Assert\NotNull()
                 ],
                 'email' => [
                     new Assert\NotNull(),
@@ -35,18 +34,22 @@ class OrderValidator
                 'address' => [
                     new Assert\NotNull()
                 ],
-                'items' => new Assert\All([
-                    new Assert\Collection([
-                        'id' => [
-                            new Assert\NotNull(),
-                            new Assert\Type('integer')
-                        ],
-                        'amount' => [
-                            new Assert\NotNull(),
-                            new Assert\Type('integer')
-                        ]
+                'items' => [
+                    new Assert\NotBlank(),
+                    new Assert\All([
+                        new Assert\Collection([
+                            'id' => [
+                                new Assert\NotNull(),
+                                new Assert\Type('integer')
+                            ],
+                            'amount' => [
+                                new Assert\NotNull(),
+                                new Assert\Type('integer'),
+                                new Assert\Range(['min' => 1])
+                            ]
+                        ])
                     ])
-                ]),
+                ],
                 'comments' => []
             ])
         ]);
