@@ -25,8 +25,7 @@ class OrderValidator
                     new Assert\NotNull()
                 ],
                 'phone' => [
-                    new Assert\NotNull(),
-                    new Assert\Regex('/\+?[0-9 ]{9,}/')
+                    new Assert\NotNull()
                 ],
                 'email' => [
                     new Assert\NotNull(),
