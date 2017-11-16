@@ -15,6 +15,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
+    /**
+     * Cost of delivery. Added to final price.
+     *
+     * TODO: Maintain delivery in more appropriate way.
+     */
+    public const DELIVERY_COST = 15.00;
+
     public const UNACCEPTED = 0;
     public const ACCEPTED = 1;
     public const PAID = 2;
@@ -194,6 +201,8 @@ class Order
         foreach ($this->orderedItems as $orderedItem) {
             $total += $orderedItem->getAmount() * $orderedItem->getItem()->getPrice();
         }
+
+        $total += self::DELIVERY_COST;
 
         return $total;
     }
