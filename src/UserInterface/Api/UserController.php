@@ -49,7 +49,7 @@ class UserController extends Controller
     }
 
     /**
-     * GET /api/auth
+     * POST /api/auth
      *
      * Example request:
      *
