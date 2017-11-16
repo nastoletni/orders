@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nastoletni\Orders\Application;
 
+use DateTime;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Token;
 
@@ -36,6 +37,8 @@ class SignedJwtProvider
         foreach ($payload as $key => $value) {
             $builder->set($key, $value);
         }
+
+        $builder->setExpiration((new DateTime('+1 hour'))->getTimestamp());
 
         $builder->sign(
             $this->configuration->getSigner(),

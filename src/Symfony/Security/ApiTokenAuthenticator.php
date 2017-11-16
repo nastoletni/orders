@@ -97,6 +97,10 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator implements GuardA
             if (!$token->verify($this->configuration->getSigner(), $this->configuration->getSecret())) {
                 throw new AuthenticationException('Invalid credentials given');
             }
+
+            if ($token->isExpired()) {
+                throw new AuthenticationException('Given token has expired. Head to /api/auth.');
+            }
         } catch (BadMethodCallException $e) {
             throw new AuthenticationException('Invalid credentials given');
         }
