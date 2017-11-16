@@ -183,6 +183,22 @@ class Order
     }
 
     /**
+     * Returns total money for order.
+     *
+     * @return float
+     */
+    public function getTotal(): float
+    {
+        $total = 0;
+
+        foreach ($this->orderedItems as $orderedItem) {
+            $total += $orderedItem->getAmount() * $orderedItem->getItem()->getPrice();
+        }
+
+        return $total;
+    }
+
+    /**
      * @return string
      */
     public function getComments(): string

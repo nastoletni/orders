@@ -141,7 +141,8 @@ class OrderController extends Controller
 
         return $this->json([
             'message' => 'Order placed successfully',
-            'orderId' => $payload->getOrderId()
+            'orderId' => $payload->getOrderId(),
+            'total' => $payload->getTotal()
         ], 201);
     }
 
