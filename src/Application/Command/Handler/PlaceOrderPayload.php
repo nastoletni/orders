@@ -12,13 +12,20 @@ class PlaceOrderPayload
     private $orderId;
 
     /**
+     * @var float
+     */
+    private $total;
+
+    /**
      * PlaceOrderPayload constructor.
      *
      * @param string $orderId
+     * @param float $total
      */
-    public function __construct(string $orderId)
+    public function __construct(string $orderId, float $total)
     {
         $this->orderId = $orderId;
+        $this->total = $total;
     }
 
     /**
@@ -27,5 +34,13 @@ class PlaceOrderPayload
     public function getOrderId(): string
     {
         return $this->orderId;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal(): float
+    {
+        return $this->total;
     }
 }

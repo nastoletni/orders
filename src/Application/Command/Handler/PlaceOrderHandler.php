@@ -85,7 +85,8 @@ class PlaceOrderHandler
         $this->orderRepository->save($order);
 
         return new PlaceOrderPayload(
-            $order->getId()
+            $order->getId(),
+            $order->getTotal()
         );
     }
 }

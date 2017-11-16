@@ -99,6 +99,7 @@ class OrderController extends Controller
      *     {
      *         "message": "Order placed successfully",
      *         "orderId": "07bd795a-f467-4088-98fd-414594bf802b"
+     *         "total": 15.99
      *     }
      *
      * and on failure with 400 status:
@@ -141,7 +142,8 @@ class OrderController extends Controller
 
         return $this->json([
             'message' => 'Order placed successfully',
-            'orderId' => $payload->getOrderId()
+            'orderId' => $payload->getOrderId(),
+            'total' => $payload->getTotal()
         ], 201);
     }
 
