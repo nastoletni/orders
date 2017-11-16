@@ -10,6 +10,7 @@ use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Hmac\Sha512;
 use Lcobucci\JWT\Token;
+use Nastoletni\Orders\Application\SignedJwtProviderConfiguration;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,25 +25,18 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorInterface;
 class ApiTokenAuthenticator extends AbstractGuardAuthenticator implements GuardAuthenticatorInterface
 {
     /**
-     * @var Signer
+     * @var SignedJwtProviderConfiguration
      */
-    private $signer;
-
-    /**
-     * @var string
-     */
-    private $tokenKey;
+    private $configuration;
 
     /**
      * ApiTokenAuthenticator constructor.
      *
-     * @param Signer $signer
-     * @param string $tokenKey
+     * @param SignedJwtProviderConfiguration $configuration
      */
-    public function __construct(Signer $signer, string $tokenKey)
+    public function __construct(SignedJwtProviderConfiguration $configuration)
     {
-        $this->tokenKey = $tokenKey;
-        $this->signer = $signer;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -100,7 +94,7 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator implements GuardA
     {
         /** @var $token Token */
         try {
-            if (!$token->verify($this->signer, $this->tokenKey)) {
+            if (!$token->verify($this->configuration->getSigner(), $this->configuration->getSecret())) {
                 throw new AuthenticationException('Invalid credentials given');
             }
         } catch (BadMethodCallException $e) {

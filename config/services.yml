@@ -32,6 +32,12 @@ services:
     class: Nastoletni\Orders\UserInterface\Api\ItemController
     tags: ['controller.service_arguments']
 
+  user.apiController:
+    class: Nastoletni\Orders\UserInterface\Api\UserController
+    tags: ['controller.service_arguments']
+    arguments:
+      $encoderFactory: '@security.encoder_factory'
+
   #
   # Command handlers
   #
@@ -64,11 +70,17 @@ services:
   #
   # Other stuff
   #
+  jwt.provider.configuration:
+    class: Nastoletni\Orders\Application\SignedJwtProviderConfiguration
+    arguments:
+      $signer: '@security.tokenSigner'
+      $secret: '%secret%'
+
+  jwt.provider:
+    class: Nastoletni\Orders\Application\SignedJwtProvider
+
   security.tokenSigner:
     class: Lcobucci\JWT\Signer\Hmac\Sha256
 
   security.apiAuthenticator:
     class: Nastoletni\Orders\Symfony\Security\ApiTokenAuthenticator
-    arguments:
-      $signer: '@security.tokenSigner'
-      $tokenKey: '%secret%'
