@@ -4,9 +4,9 @@
       <form>
         <BaseAnimatedFold :show="showForm">
           <h1>Złóż zamówienie</h1>
-          <!--<BasePanel slim error>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea odit dolores, est iste debitis autem beatae eligendi minima officia esse quaerat similique dolorem, dicta, quidem illo? Doloremque hic dicta voluptas.</p>
-                </BasePanel>-->
+          <BasePanel slim error v-if="error">
+            <p>{{error}}</p>
+          </BasePanel>
           <BaseFormControl v-for="field in fields" :key="field.name" :label="field.label" :type="field.type || 'text'" v-model="field.value" @focus="field.hasBeenFocused = true" :error="getFieldError(field)" />
 
           <BaseDivider />
@@ -15,7 +15,7 @@
           <div class="bottom-columns">
             <div class="spacer"></div>
             <BaseButton @click="placeOrder" :disabled="submitButtonDisabled">Złóż zamówienie</BaseButton>
-            <input type="text" readonly class="total" value="0.00 zł" />
+            <input type="text" readonly class="total" :value="total" />
           </div>
         </BaseAnimatedFold>
         <BaseAnimatedFold :show="!showForm">
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       state: 'LOADING', // DEFAULT, LOADING, SUCCESS
+      error: null,
       fields: orderFields.map(f => ({
         ...f,
         hasBeenFocused: false,
@@ -76,31 +77,41 @@ export default {
       if (field.validate === 'EMAIL') {
         return !validateEmail(field.value)
       }
-      if (field.validate === 'PHONE') {
-        return !/\+?[0-9 ]{9,}/.test(field.value)
-      }
       return false
     },
     async placeOrder() {
       this.state = 'LOADING'
       let requestData = {
-        items: this.items
+        items: this.items.map(i => ({
+          id: i.id,
+          amount: i.amount
+        })),
+        comments: ''
       }
       for (let f of this.fields) {
         requestData[f.name] = f.value
       }
-      let data = await apiFetch(`/order`, {
-        jsonBody: requestData,
-        method: 'POST'
-      })
+      try {
+        let data = await apiFetch(`/order`, {
+          jsonBody: requestData,
+          method: 'POST'
+        })
+      } catch (e) {
+        this.error = e.message
+        this.state = 'DEFAULT'
+      }
       this.state = 'SUCCESS'
     },
     async loadItems() {
       this.state = 'LOADING'
-      this.items = (await apiFetch(`/item`)).items.map(it => ({
-        ...it,
-        amount: 0
-      }))
+      try {
+        this.items = (await apiFetch(`/item`)).items.map(it => ({
+          ...it,
+          amount: 0
+        }))
+      } catch (e) {
+        this.error = e.message
+      }
       this.state = 'DEFAULT'
     }
   },
@@ -119,6 +130,12 @@ export default {
         return true
       }
       return false
+    },
+    total() {
+      return (
+        this.items.reduce((t, p) => t + p.amount * p.price, 0).toFixed(2) +
+        ' zł'
+      )
     }
   },
   mounted() {

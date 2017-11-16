@@ -16,6 +16,9 @@ th {
     <BaseContainer wide>
         <BasePanel>
             <h1>Zamówienia</h1>
+            <BasePanel slim error v-if="error">
+                <p>{{error}}</p>
+            </BasePanel>
             <table>
                 <thead>
                     <tr>
@@ -27,6 +30,7 @@ th {
                     <tr v-for="order in orders" :key="order.id">
                         <td v-for="field in orderFields" :key="field.name">{{order[field.name]}}</td>
                         <td>
+                            <BaseButton>Zapłacono</BaseButton>
                             <BaseButton danger>Usuń</BaseButton>
                         </td>
                     </tr>
@@ -40,20 +44,14 @@ import BaseContainer from './BaseContainer'
 import BasePanel from './BasePanel'
 import { orderFields } from '../schemas'
 import BaseButton from './BaseButton'
+import apiFetch from '../apiFetch'
 
 export default {
   data() {
     return {
+      error: null,
       orderFields,
-      orders: [
-        {
-          id: 2982382,
-          name: 'Jan Kowalski',
-          phone: '+1234567890',
-          email: 'email@example.com',
-          address: 'ul. Długa 123 Rybnik 44-200 Polska'
-        }
-      ]
+      orders: []
     }
   },
   props: {},
@@ -63,7 +61,23 @@ export default {
     BaseButton
   },
   computed: {},
-  methods: {},
-  watch: {}
+  methods: {
+    async loadOrders() {
+      try {
+        let data = await apiFetch('/order')
+        this.orders = data.orders
+      } catch (e) {
+        if (e.code === 401) {
+          this.$router.push('/login')
+          return
+        }
+        this.error = e.message
+      }
+    }
+  },
+  watch: {},
+  mounted() {
+    this.loadOrders()
+  }
 }
 </script>

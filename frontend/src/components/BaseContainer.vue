@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :class="{wide}">
+  <div class="container" :class="{wide, narrow}">
     <slot></slot>
   </div>
 </template>
@@ -7,7 +7,8 @@
 <script>
 export default {
   props: {
-    wide: Boolean
+    wide: Boolean,
+    narrow: Boolean
   }
 }
 </script>
@@ -38,11 +39,17 @@ export default {
     &.wide {
       width: 80%;
     }
+    &.narrow {
+      width: 40%;
+    }
   }
   @media (min-width: 1281px) {
     /* hi-res laptops and desktops */
     &.wide {
       width: 70%;
+    }
+    &.narrow {
+      width: 20%;
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
-  <div class="form-control">
-    <div class="label">
+  <div class="form-control" :class="{'force-column': forceColumn}">
+    <div class="label" :class="{'force-column': forceColumn}">
       <label>{{label}}</label>
     </div>
     <div class="field">
@@ -13,13 +13,15 @@
 
 <script>
 import BaseInputField from './BaseInputField'
+
 export default {
   inheritAttrs: false,
   props: {
     label: {
       type: String,
       required: true
-    }
+    },
+    forceColumn: Boolean
   },
   components: {
     BaseInputField
@@ -29,12 +31,20 @@ export default {
 
 <style scoped lang="less">
 @import '../style/theme';
-
+.__force-column-label() {
+  text-align: left;
+  width: 100%;
+  padding-right: 0;
+  padding-bottom: 5px;
+}
 .form-control {
   display: flex;
   flex-direction: row;
   margin-top: 10px;
   @media (max-width: 801px) {
+    flex-direction: column;
+  }
+  &.force-column {
     flex-direction: column;
   }
   .label {
@@ -44,10 +54,10 @@ export default {
     padding-right: 20px;
     font-weight: bold;
     @media (max-width: 801px) {
-      text-align: left;
-      width: 100%;
-      padding-right: 0;
-      padding-bottom: 5px;
+      .__force-column-label();
+    }
+    &.force-column {
+      .__force-column-label();
     }
   }
   .field {

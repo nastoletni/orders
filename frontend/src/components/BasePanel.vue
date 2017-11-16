@@ -27,7 +27,6 @@ export default {
   padding: 50px;
   &.slim {
       padding: 10px;
-      margin: 10px;
       margin-bottom: 30px;
   }
   &.error {
