@@ -53,7 +53,7 @@ security:
                     - security.apiAuthenticator
 
     access_control:
-        - { path: ^/api/order, roles: ROLE_API }
+        - { path: ^/api/order, roles: ROLE_API, methods: [GET, PATCH, DELETE] }
 
 web_profiler:
     toolbar: true
