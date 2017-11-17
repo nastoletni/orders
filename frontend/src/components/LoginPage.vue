@@ -47,6 +47,7 @@ export default {
             username: this.username,
             password: this.password
           },
+          noAuth: true,
           method: 'POST'
         })
         localStorage.setItem('token', resp.token)

@@ -22,7 +22,12 @@
           <BaseCircularIndicator :state="state" />
         </BaseAnimatedFold>
         <BaseAnimatedFold :show="state === 'SUCCESS'">
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae eligendi delectus quod dolore magni cumque pariatur alias eos corporis! Itaque doloremque in nam iure. Dignissimos in eum velit cumque consectetur!</p>
+          <p>Zamówienie zostało złożone</p>
+          <p>
+            Wykonaj przelew z tytułem
+            <code>Zamówienie nr {{orderId}}</code> na kwotę {{orderTotal}} zł na rachunek:
+            <code>Albert Wolszon 15 1140 2004 0000 3502 7681 6896</code>
+          </p>
         </BaseAnimatedFold>
       </form>
     </BasePanel>
@@ -48,6 +53,8 @@ export default {
     return {
       state: 'LOADING', // DEFAULT, LOADING, SUCCESS
       error: null,
+      orderId: null,
+      orderTotal: null,
       fields: orderFields.map(f => ({
         ...f,
         hasBeenFocused: false,
@@ -84,7 +91,7 @@ export default {
       let requestData = {
         items: this.items.map(i => ({
           id: i.id,
-          amount: i.amount
+          amount: parseInt(i.amount)
         })),
         comments: ''
       }
@@ -94,18 +101,24 @@ export default {
       try {
         let data = await apiFetch(`/order`, {
           jsonBody: requestData,
-          method: 'POST'
+          method: 'POST',
+          noAuth: false
         })
+        this.orderId = data.orderId
+        this.orderTotal = data.total
       } catch (e) {
         this.error = e.message
         this.state = 'DEFAULT'
+        return
       }
       this.state = 'SUCCESS'
     },
     async loadItems() {
       this.state = 'LOADING'
       try {
-        this.items = (await apiFetch(`/item`)).items.map(it => ({
+        this.items = (await apiFetch(`/item`, {
+          noAuth: true
+        })).items.map(it => ({
           ...it,
           amount: 0
         }))
@@ -124,7 +137,7 @@ export default {
         return true
       }
       if (
-        this.items.some(p => p.amount < 0) ||
+        this.items.some(p => p.amount < 0 || isNaN(parseInt(p.amount))) ||
         this.items.every(p => p.amount === 0)
       ) {
         return true

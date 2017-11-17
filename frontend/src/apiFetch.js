@@ -11,7 +11,7 @@ export default async function apiFetch(endpoint, options = {}) {
   ) {
     extraHeaders['Content-Type'] = 'application/json'
   }
-  if(localStorage.getItem("token")) {
+  if(localStorage.getItem("token") && !options.noAuth) {
     extraHeaders['Authorization'] = `Bearer ${localStorage.getItem("token")}`
   }
   let resp = await fetch(urljoin(API_URL, endpoint), {
