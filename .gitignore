@@ -1,5 +1,7 @@
 .idea
+.vscode
 
 vendor
 var
 config/parameters.yml
+public/assets
