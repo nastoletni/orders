@@ -1,3 +1,8 @@
+frontend:
+  path: /
+  methods: [GET]
+  defaults: { _controller: 'frontend.controller:frontend' }
+
 api.auth:
   path: /api/auth
   methods: [POST]

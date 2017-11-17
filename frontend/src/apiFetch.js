@@ -1,6 +1,6 @@
 import urljoin from 'url-join'
 import ApiError from './errors/ApiError'
-export const API_URL = 'http://localhost:1337/localhost:8000/api'
+export const API_URL = '/api'
 
 export default async function apiFetch(endpoint, options = {}) {
   let extraHeaders = {}
