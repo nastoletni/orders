@@ -113,7 +113,7 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator implements GuardA
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new JsonResponse(['error' => $exception->getMessage()], 400);
+        return new JsonResponse(['error' => $exception->getMessage()], 401);
     }
 
     /**
