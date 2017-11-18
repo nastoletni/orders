@@ -49,4 +49,7 @@ textarea {
     border-image: @error-gradient 1;
   }
 }
+textarea {
+  resize: vertical;
+}
 </style>
