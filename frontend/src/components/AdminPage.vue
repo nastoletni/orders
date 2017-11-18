@@ -11,6 +11,26 @@ th {
   padding: 20px;
   text-align: left;
 }
+select {
+  border: 5px solid #ccc;
+  padding: 10px;
+
+  &.stage-0 { // Unaccepted
+    border-color: #e74c3c;
+  }
+  &.stage-1 { // Accepted
+    border-color: #f1c40f;
+  }
+  &.stage-2 { // Paid
+    border-color: #3498db;
+  }
+  &.stage-3 { // Sent
+    border-color: #2ecc71;
+  }
+  &.stage-4 { // Delivered
+    border-color: #1abc9c;
+  }
+}
 </style>
 <template>
   <BaseContainer wide>
@@ -32,7 +52,7 @@ th {
             <td v-for="field in orderFields" :key="field.name">{{order[field.name]}}</td>
             <td>
               <span v-if="order.stageLoading">Ładowanie</span>
-              <select v-else :value="order.stage.toString()" @input="changeStage(order, $event.target.value)">
+              <select v-else :value="order.stage.toString()" @input="changeStage(order, $event.target.value)" :class="`stage-${order.stage.toString()}`">
                 <option value="0">Niezaakceptowane</option>
                 <option value="1">Zaakceptowane</option>
                 <option value="2">Zapłacone</option>
