@@ -15,25 +15,37 @@ select {
   border: 5px solid #ccc;
   padding: 10px;
 
-  &.stage-0 { // Unaccepted
+  &.stage-0 {
+    // Unaccepted
     border-color: #e74c3c;
   }
-  &.stage-1 { // Accepted
+  &.stage-1 {
+    // Accepted
     border-color: #f1c40f;
   }
-  &.stage-2 { // Paid
+  &.stage-2 {
+    // Paid
     border-color: #3498db;
   }
-  &.stage-3 { // Sent
+  &.stage-3 {
+    // Sent
     border-color: #2ecc71;
   }
-  &.stage-4 { // Delivered
+  &.stage-4 {
+    // Delivered
     border-color: #1abc9c;
   }
 }
 </style>
 <template>
   <BaseContainer wide>
+    <BaseModal slim v-if="orderToDelete">
+      Na pewno chcesz usunąć to zamówienie?
+      <div class="modal-buttons">
+        <BaseButton @click="orderToDelete = null">Anuluj</BaseButton>
+        <BaseButton danger @click="deleteOrder(orderToDelete)">Usuń</BaseButton>
+      </div>
+    </BaseModal>
     <BasePanel>
       <h1>Zamówienia</h1>
       <BasePanel slim error v-if="error">
@@ -62,7 +74,7 @@ select {
             </td>
             <td>
 
-              <BaseButton danger>Usuń</BaseButton>
+              <BaseButton danger @click="orderToDelete = order">Usuń</BaseButton>
             </td>
           </tr>
         </tbody>
@@ -77,11 +89,13 @@ import { orderFields } from '../schemas'
 import BaseButton from './BaseButton'
 import apiFetch from '../apiFetch'
 import { encodeParams } from '../utils'
+import BaseModal from './BaseModal'
 
 export default {
   data() {
     return {
       error: null,
+      orderToDelete: null,
       orderFields,
       orders: []
     }
@@ -90,7 +104,8 @@ export default {
   components: {
     BaseContainer,
     BasePanel,
-    BaseButton
+    BaseButton,
+    BaseModal
   },
   computed: {},
   methods: {
@@ -119,8 +134,21 @@ export default {
           }
         })
         order.stage = parseInt(stage)
+      } catch (e) {
+        this.error = e.message
       } finally {
         order.stageLoading = false
+      }
+    },
+    async deleteOrder(order) {
+      try {
+        await apiFetch(encodeParams`/order/${order.id}`, {
+          method: 'DELETE'
+        })
+        this.orders.splice(this.orders.indexOf(order), 1)
+        this.orderToDelete = null
+      } catch (e) {
+        this.error = e.message
       }
     }
   },
