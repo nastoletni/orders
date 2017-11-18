@@ -19,5 +19,11 @@ export const orderFields = [
     name: 'address',
     type: 'textarea',
     validate: 'NOT_EMPTY'
+  },
+  {
+    label: 'Komentarz (opcjonalne)',
+    name: 'comments',
+    type: 'textarea',
+    validate: ''
   }
 ]
