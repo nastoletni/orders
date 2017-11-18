@@ -1,15 +1,20 @@
 <style lang="less" scoped>
 @import '../style/theme';
 table {
-  width: 100%;
   border-collapse: collapse;
   border: 1;
+  td,
+  th {
+    text-align: left;
+    padding: 20px;
+  }
+  &.main {
+    width: 100%;
+  }
 }
-td,
-th {
+
+tr:not(.inside) {
   border-bottom: 1px solid @muted-color;
-  padding: 20px;
-  text-align: left;
 }
 select {
   border: 5px solid #ccc;
@@ -51,7 +56,7 @@ select {
       <BasePanel slim error v-if="error">
         <p>{{error}}</p>
       </BasePanel>
-      <table>
+      <table class="main">
         <thead>
           <tr>
             <th v-for="field in orderFields" :key="field.name">{{field.label}}</th>
@@ -60,23 +65,52 @@ select {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="order in orders" :key="order.id">
-            <td v-for="field in orderFields" :key="field.name">{{order[field.name]}}</td>
-            <td>
-              <span v-if="order.stageLoading">Ładowanie</span>
-              <select v-else :value="order.stage.toString()" @input="changeStage(order, $event.target.value)" :class="`stage-${order.stage.toString()}`">
-                <option value="0">Niezaakceptowane</option>
-                <option value="1">Zaakceptowane</option>
-                <option value="2">Zapłacone</option>
-                <option value="3">Wysłane</option>
-                <option value="4">Dostarczone</option>
-              </select>
-            </td>
-            <td>
+          <template v-for="order in orders">
+            <tr :key="order.id" class="inside">
+              <td v-for="field in orderFields" :key="field.name">{{order[field.name]}}</td>
+              <td>
+                <span v-if="order.stageLoading">Ładowanie</span>
+                <select v-else :value="order.stage.toString()" @input="changeStage(order, $event.target.value)" :class="`stage-${order.stage.toString()}`">
+                  <option value="0">Niezaakceptowane</option>
+                  <option value="1">Zaakceptowane</option>
+                  <option value="2">Zapłacone</option>
+                  <option value="3">Wysłane</option>
+                  <option value="4">Dostarczone</option>
+                </select>
+              </td>
+              <td>
+                <BaseButton danger @click="orderToDelete = order">Usuń</BaseButton>
+              </td>
+            </tr>
+            <tr :key="order.id + 'items'">
+              <td colspan="7">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nazwa</th>
+                      <th>Ilość</th>
+                      <th>Cena</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in order.items" :key="item.id">
 
-              <BaseButton danger @click="orderToDelete = order">Usuń</BaseButton>
-            </td>
-          </tr>
+                      <td>{{item.item.name}}</td>
+                      <td>{{item.amount}}</td>
+                      <td>{{(item.item.price * item.amount).toFixed(2)}}</td>
+                    </tr>
+
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2">Suma:</td>
+                      <td>{{total(order)}}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </BasePanel>
@@ -150,6 +184,12 @@ export default {
       } catch (e) {
         this.error = e.message
       }
+    },
+    total(order) {
+      return order.items.reduce(
+        (p, i) => p + i.item.price * i.amount,
+        15
+      ).toFixed(2)
     }
   },
   watch: {},
