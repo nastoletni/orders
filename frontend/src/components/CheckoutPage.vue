@@ -111,7 +111,7 @@ export default {
         let data = await apiFetch(`/order`, {
           jsonBody: requestData,
           method: 'POST',
-          noAuth: false
+          noAuth: true
         })
         this.orderId = data.orderId
         this.orderTotal = data.total
