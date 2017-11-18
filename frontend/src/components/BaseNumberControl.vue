@@ -3,11 +3,12 @@
     <div class="label">
       <label>{{label}}</label>
     </div>
-    <div class="number-control">
+    <div class="number-control" v-if="amount">
       <BaseButton type="button" @click="add(-1)" :disabled="value === 0">-</BaseButton>
       <BaseInputField type="number" @input="$emit('input', $event)" :value="value" />
       <BaseButton type="button" @click="add(1)">+</BaseButton>
     </div>
+    <div class="number-control" v-else />
     <BaseInputField type="text" class="price" :value="price" readonly/>
   </div>
 </template>
@@ -33,6 +34,10 @@ export default {
     },
     price: {
       type: String
+    },
+    amount: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

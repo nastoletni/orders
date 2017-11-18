@@ -7,10 +7,14 @@
           <BasePanel slim error v-if="error">
             <p>{{error}}</p>
           </BasePanel>
-          <BaseFormControl v-for="field in fields" :key="field.name" :label="field.label" :type="field.type || 'text'" v-model="field.value" @focus="field.hasBeenFocused = true" :error="getFieldError(field)" />
-
+          <div v-for="field in fields" :key="field.name">
+            <BaseFormControl :label="field.label" :type="field.type || 'text'" v-model="field.value" @focus="field.hasBeenFocused = true" :error="getFieldError(field)" />
+            <div class="field-description" v-if="field.name === 'address'">Proszę podać adres paczkomatu (lista dostępna na
+              <a href="https://twoj.inpost.pl/pl/znajdz-punkt-inpost" target="_blank" rel="noopener noreferrer nofollow">stronie InPostu</a>)</div>
+          </div>
           <BaseDivider />
           <BaseNumberControl v-for="item in items" :key="item.name" :label="item.name" v-model="item.amount" :price="(item.amount * item.price).toFixed(2) + ' zł'" />
+          <BaseNumberControl label="Paczkomat" price="15.00 zł" :amount="false" />
           <BaseDivider />
           <div class="bottom-columns">
             <div class="spacer"></div>
@@ -22,11 +26,16 @@
           <BaseCircularIndicator :state="state" />
         </BaseAnimatedFold>
         <BaseAnimatedFold :show="state === 'SUCCESS'">
-          <p>Zamówienie zostało złożone</p>
+          <h1 class="success-header">Zamówienie zostało złożone</h1>
           <p>
             Wykonaj przelew z tytułem
-            <code>Zamówienie nr {{orderId}}</code> na kwotę {{orderTotal}} zł na rachunek:
-            <code>Albert Wolszon 15 1140 2004 0000 3502 7681 6896</code>
+            <div class="info-box">Zamówienie nr {{orderId}}</div>
+            na kwotę
+            <div class="info-box">{{orderTotal}} zł</div>
+            na rachunek:
+            <div class="info-box">
+              Albert Wolszon 15 1140 2004 0000 3502 7681 6896
+            </div>
           </p>
         </BaseAnimatedFold>
       </form>
@@ -51,7 +60,7 @@ export default {
   name: 'CheckoutPage',
   data() {
     return {
-      state: 'LOADING', // DEFAULT, LOADING, SUCCESS
+      state: 'DEFAULT', // DEFAULT, LOADING, SUCCESS
       error: null,
       orderId: null,
       orderTotal: null,
@@ -146,7 +155,7 @@ export default {
     },
     total() {
       return (
-        this.items.reduce((t, p) => t + p.amount * p.price, 0).toFixed(2) +
+        this.items.reduce((t, p) => t + p.amount * p.price, 15).toFixed(2) +
         ' zł'
       )
     }
@@ -158,6 +167,7 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import '../style/theme';
 .bottom-columns {
   display: flex;
   flex-direction: row;
@@ -175,5 +185,18 @@ export default {
     padding: 15px 20px;
     width: 20%;
   }
+}
+.success-header {
+  text-align: center;
+}
+.info-box {
+  background: #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.field-description {
+  text-align: right;
+  margin-right: 10px;
 }
 </style>
