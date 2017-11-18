@@ -1,0 +1,2 @@
+# Because it is compiled by Webpack, e.g. `npm run build`
+index.html

@@ -51,7 +51,7 @@ export default {
   name: 'CheckoutPage',
   data() {
     return {
-      state: 'LOADING', // DEFAULT, LOADING, SUCCESS
+      state: 'SUCCESS', // DEFAULT, LOADING, SUCCESS
       error: null,
       orderId: null,
       orderTotal: null,

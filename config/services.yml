@@ -24,6 +24,10 @@ services:
   #
   # Controllers
   #
+  frontend.controller:
+    class: Nastoletni\Orders\UserInterface\Web\FrontendController
+    tags: ['controller.service_arguments']
+
   order.apiController:
     class: Nastoletni\Orders\UserInterface\Api\OrderController
     tags: ['controller.service_arguments']

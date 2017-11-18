@@ -9,6 +9,12 @@ framework:
     profiler: { only_exceptions: false }
     validation: { enabled: true }
 
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    paths:
+        '%kernel.project_dir%/src/views': views
+
 doctrine:
     dbal:
         driver: pdo_mysql
