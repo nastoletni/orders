@@ -101,8 +101,7 @@ export default {
         items: this.items.map(i => ({
           id: i.id,
           amount: parseInt(i.amount)
-        })),
-        comments: ''
+        }))
       }
       for (let f of this.fields) {
         requestData[f.name] = f.value
