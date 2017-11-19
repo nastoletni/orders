@@ -60,7 +60,3 @@ security:
 
     access_control:
         - { path: ^/api/order, roles: ROLE_API, methods: [GET, PATCH, DELETE] }
-
-web_profiler:
-    toolbar: true
-    intercept_redirects: false

@@ -58,6 +58,13 @@ class Kernel extends SymfonyKernel
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
         $loader->load(dirname(__DIR__).'/config/config.yml');
+
+        if (isset($this->bundles['WebProfilerBundle'])) {
+            $c->loadFromExtension('web_profiler', [
+                'toolbar' => true,
+                'intercept_redirects' => false
+            ]);
+        }
     }
 
     /**
