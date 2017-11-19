@@ -1,4 +1,7 @@
-FallbackResource index.php
+Options -MultiViews
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ app.php [QSA,L]
 
 # https://stackoverflow.com/a/26986394/3158312
 SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
