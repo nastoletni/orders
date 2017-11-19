@@ -68,6 +68,11 @@ class PlaceOrderHandler
         $order->setPlacedAt(new DateTime());
 
         foreach ($command->getItems() as $commandItem) {
+            if (intval($commandItem['amount']) == 0) {
+                // Don't order items with amount of 0.
+                continue;
+            }
+
             try {
                 $item = $this->itemRepository->byId($commandItem['id']);
             } catch (ItemNotFoundException $e) {

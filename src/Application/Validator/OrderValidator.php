@@ -7,6 +7,7 @@ namespace Nastoletni\Orders\Application\Validator;
 use Nastoletni\Orders\Application\Command\Handler\Exception\OrderNotValidException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Validation;
 
 class OrderValidator
@@ -44,11 +45,11 @@ class OrderValidator
                             ],
                             'amount' => [
                                 new Assert\NotNull(),
-                                new Assert\Type('integer'),
-                                new Assert\Range(['min' => 1])
+                                new Assert\Type('integer')
                             ]
                         ])
-                    ])
+                    ]),
+                    new Assert\Callback([self::class, 'validateItems'])
                 ],
                 'comments' => []
             ])
@@ -56,6 +57,30 @@ class OrderValidator
 
         if (count($violations) > 0) {
             throw new OrderNotValidException($violations);
+        }
+    }
+
+    /**
+     * @param array $items
+     * @param ExecutionContextInterface $context
+     * @param $payload
+     */
+    public function validateItems(array $items, ExecutionContextInterface $context, $payload): void
+    {
+        $some = false;
+
+        foreach ($items as $item) {
+            if ($item['amount'] > 0) {
+                $some = true;
+                break;
+            }
+        }
+
+        if (!$some) {
+            $context
+                ->buildViolation('There should be at least one item in order.')
+                ->atPath('items')
+                ->addViolation();
         }
     }
 }
