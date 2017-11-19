@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Nastoletni\Orders;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Nelmio\CorsBundle\NelmioCorsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
+use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -29,7 +29,8 @@ class Kernel extends SymfonyKernel
             new FrameworkBundle(),
             new TwigBundle(),
             new DoctrineBundle(),
-            new SecurityBundle()
+            new SecurityBundle(),
+            new SwiftmailerBundle()
         ];
 
         if ('dev' == $this->getEnvironment()) {
