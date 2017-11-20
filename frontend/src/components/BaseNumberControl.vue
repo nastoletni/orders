@@ -66,14 +66,14 @@ export default {
   flex-wrap: nowrap;
   margin-bottom: 10px;
   .label {
-    width: 20%;
+    width: 40%;
     align-self: center;
-    text-align: right;
+    text-align: left;
     padding-right: 20px;
     font-weight: bold;
   }
   .number-control {
-    width: 50%;
+    width: 30%;
   }
   .price {
     width: 20%;
