@@ -60,11 +60,3 @@ security:
 
     access_control:
         - { path: ^/api/order, roles: ROLE_API, methods: [GET, PATCH, DELETE] }
-
-swiftmailer:
-    transport:            '%mailer_transport%'
-    username:             '%mailer_username%'
-    password:             '%mailer_password%'
-    host:                 '%mailer_host%'
-    port:                 '%mailer_post%'
-    encryption:           '%mailer_encryption%'

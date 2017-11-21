@@ -8,7 +8,6 @@ use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
-use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -29,8 +28,7 @@ class Kernel extends SymfonyKernel
             new FrameworkBundle(),
             new TwigBundle(),
             new DoctrineBundle(),
-            new SecurityBundle(),
-            new SwiftmailerBundle()
+            new SecurityBundle()
         ];
 
         if ('dev' == $this->getEnvironment()) {
